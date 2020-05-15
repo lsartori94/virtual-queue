@@ -45,7 +45,11 @@ socket.on('update', (message) => {
   while (ordersContainer.firstChild) {
     ordersContainer.removeChild(ordersContainer.lastChild);
   }
-  const items = message.map(orderElem);
+  const filteredItems = message.filter((el) => {
+    return el.status === STATUS.READY_FOR_DELIVERY ||
+      el.status === STATUS.DELIVERING;
+  });
+  const items = filteredItems.map(orderElem);
   items.forEach((el) => {
     ordersContainer.appendChild(createElementFromHTML(el));
   });
@@ -53,40 +57,42 @@ socket.on('update', (message) => {
   updateOrdersHandlers();
 });
 
-const prepare = (spot) => {
+const deliver = (spot) => {
   const payload = {
     id: spot
   };
 
-  socket.emit('prepare', payload);
+  socket.emit('delivering', payload);
 };
 
-const toDeliver = (spot) => {
+const delivered = (spot) => {
   const payload = {
     id: spot
   };
 
-  socket.emit('ready for delivery', payload);
+  socket.emit('delivered', payload);
 }
 
 let selectedOrder;
 const calculateIDValue = (el) => +el.getAttribute('data-id');
 
-const prepareButton = document.getElementById('prepare');
-const toDeliveryButton = document.getElementById('to-deliver');
+const deliverButton = document.getElementById('deliver');
+const deliveredButton = document.getElementById('delivered');
 
-const prepareClick = (_) => {
+const deliverClick = (_) => {
   console.log('update :>>');
-  prepare(calculateIDValue(selectedOrder));
+  selectedOrder.querySelector('.order-status').textContent = 'DELIVERING';
+  deliver(calculateIDValue(selectedOrder));
 };
 
-const toDeliveryClick = (_) => {
+const deliveredClick = (_) => {
   console.log('update :>>');
-  toDeliver(calculateIDValue(selectedOrder));
+  selectedOrder.querySelector('.order-status').textContent = 'DELIVERED';
+  delivered(calculateIDValue(selectedOrder));
 };
 
-prepareButton.addEventListener('click', prepareClick);
-toDeliveryButton.addEventListener('click', toDeliveryClick);
+deliverButton.addEventListener('click', deliverClick);
+deliveredButton.addEventListener('click', deliveredClick);
 
 function updateOrdersHandlers() {
   const orderContainers = document.querySelectorAll('.order-container');

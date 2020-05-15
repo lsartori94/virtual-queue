@@ -8,23 +8,29 @@
 
   <base target="_blank">
 
-  <title>VQ Admin</title>
-
+  <title>VQ Delivery</title>
+  <link rel="stylesheet" href="./main.css" />
 </head>
 
 <body>
 
   <div id="container">
-    <div class="parking-spot" data-spot="1">1</div>
-    <div class="parking-spot" data-spot="2">2</div>
-    <div class="parking-spot" data-spot="3">3</div>
-    <div class="parking-spot" data-spot="4">4</div>
-    <div class="parking-spot" data-spot="5">5</div>
-    <div class="parking-spot" data-spot="6">6</div>
-    <div class="parking-spot" data-spot="7">7</div>
+    <div class="queue-container">
+      <div class="queue-header">
+        <span class="order-spot">Parking Spot</span>
+        <span class="order-id">Order#</span>
+        <span class="order-status">Status</span>
+        <span class="order-time">Time</span>
+      </div>
+      <div id="queue-items">
+
+      </div>
+    </div>
+    <div id="prepare" role="button">Prepare</div>
+    <div id="to-deliver" role="button">To Deliver</div>
   </div>
 
-  <script src="/node_modules/socket.io/lib/client.js"></script>
-  <script src="js/main.js"></script>
+  <script src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+  <script src="./main.js"></script>
 </body>
 </html>

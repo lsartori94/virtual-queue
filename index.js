@@ -25,41 +25,49 @@ const spots = [
     id: 1,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 2,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 3,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 4,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 5,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 6,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
   {
     id: 7,
     status: STATUS.FREE,
     elapsedTime: 0,
+    order: 1234,
   },
 ];
 
 io.on('connection', (socket) => {
   console.log('Someone Joined');
+  socket.broadcast.emit('update', spots);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
@@ -93,9 +101,9 @@ io.on('connection', (socket) => {
   }
 
   socket.on('park', (message) => {
-    log('Received request to park ' + message);
     const {id} = message;
     const {PARKED} = STATUS;
+    log('Received request to park ' + id + ' to ' + PARKED);
     update({
       id,
       status: PARKED
@@ -110,7 +118,7 @@ io.on('connection', (socket) => {
     log('Received request to prepare ' + message);
     const {id} = message;
     const {PREPARING} = STATUS;
-
+    log('Received request to prepare ' + id + ' to ' + PREPARING);
     update({
       id,
       status: PREPARING
@@ -121,23 +129,19 @@ io.on('connection', (socket) => {
   });
 
   socket.on('ready for delivery', (message) => {
-    log('Received request to prepare ' + message);
     const {id} = message;
-    const {PREPARING} = STATUS;
-
+    const {READY_FOR_DELIVERY} = STATUS;
+    log('Received request to prepare for delivery ' + id + ' to ' + READY_FOR_DELIVERY);
     update({
       id,
-      status: PREPARING
+      status: READY_FOR_DELIVERY
     })
-
-    // Simulate prepare
-    prepare(id);
   });
 
   socket.on('delivering', (message) => {
-    log('Received request to deliver ' + message);
     const {id} = message;
     const {DELIVERING} = STATUS;
+    log('Received request to deliver ' + id + ' to ' + DELIVERING);
 
     update({
       id,
@@ -146,10 +150,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('delivered', (message) => {
-    log('Received request to delivered ' + message);
     const {id} = message;
     const {DELIVERED} = STATUS;
-
+    log('Received request to delivered ' + id + ' to ' + DELIVERED);
     update({
       id,
       status: DELIVERED
@@ -157,10 +160,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('leave', (message) => {
-    log('Received request to leave ' + message);
     const {id} = message;
     const {FREE} = STATUS;
-
+    log('Received request to leave ' + id + ' to ' + FREE);
     update({
       id,
       status: FREE
