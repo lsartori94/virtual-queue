@@ -1,0 +1,48 @@
+#container {
+  max-width: 600px;
+}
+#parkContainer,
+#leaveContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+#park {
+  background-color: rgb(8, 23, 242);
+  color: white;
+  border-radius: 5px;
+  height: 100px;
+  width: 200px;
+  text-align: center;
+  line-height: 100px;
+  cursor: pointer;
+}
+#parking,
+#leaving {
+  display: grid;
+  grid-template-columns: 50px 50px 50px;
+  grid-template-rows: 50px 50px 50px;
+}
+.parking-spot {
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  cursor: pointer;
+}
+.parking-spot.selected {
+  background-color: coral;
+  color: white;
+  border-radius: 25px;
+}
+
+#leave {
+  background-color: rgb(109, 175, 17);
+  color: white;
+  border-radius: 5px;
+  height: 100px;
+  width: 200px;
+  text-align: center;
+  line-height: 100px;
+  cursor: pointer;
+}
