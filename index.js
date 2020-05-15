@@ -15,40 +15,48 @@ const STATUS = {
   FREE: 'FREE',
   PARKED: 'PARKED',
   PREPARING: 'PREPARING',
+  READY_FOR_DELIVERY: 'READY_FOR_DELIVERY',
   DELIVERING: 'DELIVERING',
   DELIVERED: 'DELIVERED',
 }
 
-const spots = {
-  1: {
+const spots = [
+  {
+    id: 1,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  2: {
+  {
+    id: 2,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  3: {
+  {
+    id: 3,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  4: {
+  {
+    id: 4,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  5: {
+  {
+    id: 5,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  6: {
+  {
+    id: 6,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-  7: {
+  {
+    id: 7,
     status: STATUS.FREE,
     elapsedTime: 0,
   },
-};
+];
 
 io.on('connection', (socket) => {
   console.log('Someone Joined');
@@ -74,7 +82,11 @@ io.on('connection', (socket) => {
   function update({id, status}){
     log('Received request to update ' + status);
     // Update spot status
-    spots[id].status = status;
+    spots.forEach((el, i) => {
+      if (el.id === id) {
+        spots[i].status = status;
+      }
+    });
 
     // Update clients
     socket.broadcast.emit('update', spots);
@@ -108,7 +120,21 @@ io.on('connection', (socket) => {
     prepare(id);
   });
 
-  socket.on('deliver', (message) => {
+  socket.on('ready for delivery', (message) => {
+    log('Received request to prepare ' + message);
+    const {id} = message;
+    const {PREPARING} = STATUS;
+
+    update({
+      id,
+      status: PREPARING
+    })
+
+    // Simulate prepare
+    prepare(id);
+  });
+
+  socket.on('delivering', (message) => {
     log('Received request to deliver ' + message);
     const {id} = message;
     const {DELIVERING} = STATUS;
